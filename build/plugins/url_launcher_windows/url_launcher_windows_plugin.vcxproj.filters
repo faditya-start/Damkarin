@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\url_launcher_windows.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\messages.g.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\system_apis.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\url_launcher_plugin.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\include\url_launcher_windows\url_launcher_windows.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\messages.g.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\system_apis.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\url_launcher_plugin.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\ahmad\Documents\KULIAH\UPNVJ\Lomba\Lomba\Damkarin\frontend\windows\flutter\ephemeral\.plugin_symlinks\url_launcher_windows\windows\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{E13B1281-2BB6-3608-97D2-595680AF1CC7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{1023DAB3-F063-3285-98C5-B642F42AD3DD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

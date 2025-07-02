@@ -1,0 +1,13 @@
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/CMakeFiles/INSTALL.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/CMakeFiles/ALL_BUILD.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/CMakeFiles/ZERO_CHECK.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/flutter/CMakeFiles/flutter_wrapper_plugin.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/flutter/CMakeFiles/flutter_wrapper_app.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/flutter/CMakeFiles/flutter_assemble.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/flutter/CMakeFiles/INSTALL.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/runner/CMakeFiles/frontend.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/runner/CMakeFiles/INSTALL.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/runner/CMakeFiles/ALL_BUILD.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/plugins/url_launcher_windows/CMakeFiles/url_launcher_windows_plugin.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/plugins/url_launcher_windows/CMakeFiles/INSTALL.dir
+C:/Users/ahmad/Documents/KULIAH/UPNVJ/Lomba/Lomba/Damkarin/build/plugins/url_launcher_windows/CMakeFiles/ALL_BUILD.dir
