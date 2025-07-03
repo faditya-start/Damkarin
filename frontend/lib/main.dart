@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
+import 'screens/education_screen.dart';
+import 'screens/profile.dart';
+import 'screens/home_screen.dart';
+
 
 void main() {
   runApp(const MyApp());
@@ -11,14 +15,25 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Damkarin',
       theme: ThemeData(
         primarySwatch: Colors.red,
         fontFamily: 'Arial',
       ),
-      home: LoginScreen(),
-      debugShowCheckedModeBanner: false,
+
+      
+      initialRoute: '/home',
+
+      
+      routes: {
+        '/education': (context) => const Education(),
+        '/profile': (context) => const Profile(),
+        '/login': (context) => LoginScreen(),
+
+        '/home': (context) => const Home(),
+        // '/unit': (context) => const Unit(),
+      },
     );
   }
 }
-  
