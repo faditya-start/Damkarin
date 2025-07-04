@@ -28,31 +28,19 @@ class _EducationState extends State<Education> {
     }
   }
 
-  void _showEmergencyDialog() {
+  void _onEmergencyPressed() {
     showDialog(
       context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Panggilan Darurat"),
-          content: const Text("Hubungi 112 sekarang?"),
-          actions: [
-            TextButton(
-              child: const Text("Tidak"),
-              onPressed: () => Navigator.of(context).pop(),
-            ),
-            ElevatedButton(
-              child: const Text("Ya"),
-              onPressed: () async {
-                Navigator.of(context).pop();
-                final Uri url = Uri.parse("tel:112");
-                if (await canLaunchUrl(url)) {
-                  await launchUrl(url);
-                }
-              },
-            ),
-          ],
-        );
-      },
+      builder: (_) => AlertDialog(
+        title: const Text('Darurat'),
+        content: const Text('Menghubungi 112...'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Tutup'),
+          ),
+        ],
+      ),
     );
   }
 
@@ -135,7 +123,7 @@ class _EducationState extends State<Education> {
       bottomNavigationBar: CustomBottomNavBar(
         selectedIndex: _currentIndex,
         onTap: _onTabTapped,
-        onEmergencyPressed: _showEmergencyDialog,
+        onEmergencyPressed: _onEmergencyPressed,
       ),
     );
   }
