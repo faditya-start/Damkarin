@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'screens/login_screen.dart';
+import 'screens/tracking_screen.dart';
 
-void main() {
-  runApp(const MyApp());
-}
+void main() => runApp(const MyApp());
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -11,14 +10,14 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Damkarin',
-      theme: ThemeData(
-        primarySwatch: Colors.red,
-        fontFamily: 'Arial',
-      ),
-      home: LoginScreen(),
+      title: 'Aplikasi Damkar',
+      theme: ThemeData(primarySwatch: Colors.red),
+      initialRoute: '/login',
+      routes: {
+        '/login': (context) => LoginScreen(),
+        '/tracking': (context) => const TrackingScreen(),
+      },
       debugShowCheckedModeBanner: false,
     );
   }
 }
-  

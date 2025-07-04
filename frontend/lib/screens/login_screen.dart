@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class LoginScreen extends StatelessWidget {
+  LoginScreen({super.key});
+
   final TextEditingController phoneController = TextEditingController();
 
   @override
@@ -35,7 +37,7 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  // TODO: handle login
+                  Navigator.pushReplacementNamed(context, '/tracking');
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
@@ -80,13 +82,7 @@ class LoginScreen extends StatelessWidget {
                     ),
                     GestureDetector(
                       onTap: () {
-                        // TODO: Arahkan ke Register Screen
-                        //Navigator.push(
-                          //context,  
-                          //MaterialPageRoute(
-                            //builder: (context) => registerScreen(),
-                          //),
-                        //);
+                        Navigator.pushNamed(context, '/register');
                       },
                       child: const Text(
                         "Daftar",
