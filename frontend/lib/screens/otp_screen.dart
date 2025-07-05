@@ -17,63 +17,81 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void initState() {
     super.initState();
-    // Munculkan dialog setelah 5 detik
     Future.delayed(const Duration(seconds: 5), () {
-      showDialog(
-        context: context,
-        builder: (_) => AlertDialog(
-          backgroundColor: Colors.white,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(16),
-          ),
-          title: Row(
-            children: const [
-              Icon(Icons.lock, color: Colors.red),
-              SizedBox(width: 8),
-              Text("Kode OTP", style: TextStyle(color: Colors.red)),
-            ],
-          ),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
-              Text(
-                "Gunakan kode berikut untuk verifikasi:",
-                style: TextStyle(fontSize: 14),
-              ),
-              SizedBox(height: 8),
-              Center(
-                child: Text(
-                  "0814",
-                  style: TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black,
-                    letterSpacing: 4,
+      if (mounted) {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            backgroundColor: Colors.white,
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            title: Row(
+              children: const [
+                Icon(Icons.lock, color: Colors.red),
+                SizedBox(width: 8),
+                Text("Kode OTP", style: TextStyle(color: Colors.red)),
+              ],
+            ),
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: const [
+                Text(
+                  "Gunakan kode berikut untuk verifikasi:",
+                  style: TextStyle(fontSize: 14),
+                ),
+                SizedBox(height: 8),
+                Center(
+                  child: Text(
+                    "0814",
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                      letterSpacing: 4,
+                    ),
                   ),
                 ),
+              ],
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text("OK", style: TextStyle(color: Colors.red)),
               ),
             ],
           ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text("OK", style: TextStyle(color: Colors.red)),
-            ),
-          ],
-        ),
-      );
+        );
+      }
     });
   }
 
   void _checkOtpAndNavigate() {
-    final otp = _otpControllers.map((c) => c.text).join();
-    if (otp.length == 4) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+    try {
+      final otp = _otpControllers.map((c) => c.text).join();
+      if (otp.length == 4 && mounted) {
+        // Tambahkan delay kecil untuk memastikan UI stabil
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted && context.mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+            );
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Navigation error: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override
