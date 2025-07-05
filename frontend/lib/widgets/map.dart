@@ -230,7 +230,7 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
         setState(() {
           currentLocation = loc;
         });
-        
+
         // Update lokasi awal
         if (loc.latitude != null && loc.longitude != null) {
           String areaName = getAreaName(loc.latitude!, loc.longitude!);
@@ -326,7 +326,8 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
                 ),
                 children: [
                   TileLayer(
-                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    urlTemplate:
+                        'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
                     userAgentPackageName: 'com.example.frontend',
                     maxZoom: 18,
                   ),
@@ -365,11 +366,7 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Icon(
-            Icons.map_outlined,
-            size: 48,
-            color: Colors.grey[600],
-          ),
+          Icon(Icons.map_outlined, size: 48, color: Colors.grey[600]),
           const SizedBox(height: 8),
           Text(
             'Peta Tidak Tersedia',
@@ -381,13 +378,10 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
           ),
           const SizedBox(height: 4),
           Text(
-             'Tidak dapat memuat peta.\nPeriksa koneksi internet Anda.',
-             textAlign: TextAlign.center,
-             style: TextStyle(
-               fontSize: 12,
-               color: Colors.grey[600],
-             ),
-           ),
+            'Tidak dapat memuat peta.\nPeriksa koneksi internet Anda.',
+            textAlign: TextAlign.center,
+            style: TextStyle(fontSize: 12, color: Colors.grey[600]),
+          ),
           const SizedBox(height: 12),
           ElevatedButton.icon(
             onPressed: () {

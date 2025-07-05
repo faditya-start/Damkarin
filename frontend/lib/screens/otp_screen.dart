@@ -13,6 +13,11 @@ class _OtpScreenState extends State<OtpScreen> {
     4,
     (_) => TextEditingController(),
   );
+  final List<FocusNode> _focusNodes = List.generate(
+    4,
+    (_) => FocusNode(),
+  );
+  final String _correctOtp = "0814";
 
   @override
   void initState() {
@@ -57,7 +62,10 @@ class _OtpScreenState extends State<OtpScreen> {
             ),
             actions: [
               TextButton(
-                onPressed: () => Navigator.pop(context),
+                onPressed: () {
+                  Navigator.pop(context);
+                  _autoFillOtp();
+                },
                 child: const Text("OK", style: TextStyle(color: Colors.red)),
               ),
             ],
@@ -65,6 +73,31 @@ class _OtpScreenState extends State<OtpScreen> {
         );
       }
     });
+  }
+
+  void _autoFillOtp() {
+    for (int i = 0; i < _correctOtp.length; i++) {
+      _otpControllers[i].text = _correctOtp[i];
+    }
+    _checkOtpAndNavigate();
+  }
+
+  void _onOtpChanged(String value, int index) {
+    if (value.isNotEmpty) {
+      // Pindah ke field berikutnya jika ada input
+      if (index < 3) {
+        _focusNodes[index + 1].requestFocus();
+      } else {
+        // Jika sudah di field terakhir, hilangkan focus
+        _focusNodes[index].unfocus();
+      }
+    } else {
+      // Pindah ke field sebelumnya jika input dihapus
+      if (index > 0) {
+        _focusNodes[index - 1].requestFocus();
+      }
+    }
+    _checkOtpAndNavigate();
   }
 
   void _checkOtpAndNavigate() {
@@ -90,6 +123,9 @@ class _OtpScreenState extends State<OtpScreen> {
   void dispose() {
     for (var controller in _otpControllers) {
       controller.dispose();
+    }
+    for (var focusNode in _focusNodes) {
+      focusNode.dispose();
     }
     super.dispose();
   }
@@ -126,13 +162,17 @@ class _OtpScreenState extends State<OtpScreen> {
                   width: 50,
                   child: TextField(
                     controller: _otpControllers[index],
+                    focusNode: _focusNodes[index],
                     textAlign: TextAlign.center,
                     maxLength: 1,
                     keyboardType: TextInputType.number,
-                    onChanged: (_) => _checkOtpAndNavigate(),
+                    onChanged: (value) => _onOtpChanged(value, index),
                     decoration: const InputDecoration(
                       counterText: '',
                       enabledBorder: UnderlineInputBorder(),
+                      focusedBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(color: Colors.red, width: 2),
+                      ),
                     ),
                   ),
                 );

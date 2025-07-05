@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/map.dart';
+import 'emergency_call_screen.dart';
+import 'education_screen.dart';
+import 'profile.dart';
 
 class Home extends StatefulWidget {
   const Home({super.key});
@@ -10,6 +13,7 @@ class Home extends StatefulWidget {
 
 class _HomeState extends State<Home> {
   final TextEditingController _searchController = TextEditingController();
+  int _selectedIndex = 0;
   final List<String> _allStations = [
     'Pos Damkar Papanggo',
     'Pos Damkar Podomoro',
@@ -33,8 +37,7 @@ class _HomeState extends State<Home> {
     'Pos Damkar Jatinegara',
   ];
   List<String> _filteredStations = [];
-  // late LocationData _currentLocation; // Unused field
-  String _currentArea = 'Jakarta'; // Default area
+  String _currentArea = 'Jakarta';
 
   void _getCurrentLocation() async {
     // final Location location = Location();
@@ -79,6 +82,40 @@ class _HomeState extends State<Home> {
     super.dispose();
   }
 
+  void _onItemTapped(int index) {
+    setState(() {
+      _selectedIndex = index;
+    });
+
+    // Handle navigation based on selected index
+    switch (index) {
+      case 0:
+        // Already on Home
+        break;
+      case 1:
+        // Navigate to Emergency/Call page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const EmergencyCallScreen()),
+        );
+        break;
+      case 2:
+        // Navigate to Education page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Education()),
+        );
+        break;
+      case 3:
+        // Navigate to Profile page
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const Profile()),
+        );
+        break;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -88,86 +125,110 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-            Row(
-              children: [
-                const Icon(Icons.location_on_outlined, color: Colors.black),
-                const SizedBox(width: 8),
-                Text(
-                  'Rayla, $_currentArea',
-                  style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w500),
+              Row(
+                children: [
+                  const Icon(Icons.location_on_outlined, color: Colors.black),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Rayla, $_currentArea',
+                    style: const TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 24),
+              const Text(
+                'KAMI SIAP MEMBANTU',
+                style: TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 24,
+                  color: Color(0xFF3F3D56),
                 ),
-              ],
-            ),
-            const SizedBox(height: 24),
-            const Text(
-              'KAMI SIAP MEMBANTU',
-              style: TextStyle(
-                fontWeight: FontWeight.bold,
-                fontSize: 24,
-                color: Color(0xFF3F3D56),
               ),
-            ),
-            const SizedBox(height: 4),
-            TextField(
-              controller: _searchController,
-              decoration: InputDecoration(
-                hintText: "Lokasi Damkar terdekat",
-                prefixIcon: const Icon(Icons.search),
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+              const SizedBox(height: 4),
+              TextField(
+                controller: _searchController,
+                decoration: InputDecoration(
+                  hintText: "Lokasi Damkar terdekat",
+                  prefixIcon: const Icon(Icons.search),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  contentPadding: const EdgeInsets.symmetric(vertical: 0),
                 ),
-                contentPadding: const EdgeInsets.symmetric(vertical: 0),
               ),
-            ),
-            const SizedBox(height: 8),
-            const Text(
-              'Lokasi langsung',
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.w800,
-                color: Color(0xFF3F3D56),
+              const SizedBox(height: 8),
+              const Text(
+                'Lokasi langsung',
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w800,
+                  color: Color(0xFF3F3D56),
+                ),
               ),
-            ),
-            const SizedBox(height: 12),
-            _searchController.text.isEmpty
-                ? const SizedBox.shrink()
-                : _filteredStations.isEmpty
-                    ? const Text(
-                        'Tidak ditemukan.',
-                        style: TextStyle(color: Colors.redAccent),
-                      )
-                    : Column(
-                        children: _filteredStations.map((station) {
-                          return Container(
-                            margin: const EdgeInsets.symmetric(vertical: 6),
-                            padding: const EdgeInsets.all(12),
-                            decoration: BoxDecoration(
-                              color: Colors.white,
-                              borderRadius: BorderRadius.circular(12),
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.black12,
-                                  blurRadius: 4,
-                                  offset: Offset(0, 2),
-                                ),
-                              ],
-                            ),
-                            child: Row(
-                              children: [
-                                const Icon(Icons.local_fire_department, color: Colors.redAccent),
-                                const SizedBox(width: 12),
-                                Expanded(child: Text(station)),
-                              ],
-                            ),
-                          );
-                        }).toList(),
-                      ),
-            const SizedBox(height: 12),
-            OSMMapWidget(onLocationChanged: _onLocationChanged),
-            // ... [Rekomendasi Edukasi] ...
+              const SizedBox(height: 12),
+              _searchController.text.isEmpty
+                  ? const SizedBox.shrink()
+                  : _filteredStations.isEmpty
+                  ? const Text(
+                      'Tidak ditemukan.',
+                      style: TextStyle(color: Colors.redAccent),
+                    )
+                  : Column(
+                      children: _filteredStations.map((station) {
+                        return Container(
+                          margin: const EdgeInsets.symmetric(vertical: 6),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            boxShadow: [
+                              BoxShadow(
+                                color: Colors.black12,
+                                blurRadius: 4,
+                                offset: Offset(0, 2),
+                              ),
+                            ],
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(
+                                Icons.local_fire_department,
+                                color: Colors.redAccent,
+                              ),
+                              const SizedBox(width: 12),
+                              Expanded(child: Text(station)),
+                            ],
+                          ),
+                        );
+                      }).toList(),
+                    ),
+              const SizedBox(height: 12),
+              OSMMapWidget(onLocationChanged: _onLocationChanged),
+              // ... [Rekomendasi Edukasi] ...
             ],
           ),
         ),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        currentIndex: _selectedIndex,
+        onTap: _onItemTapped,
+        selectedItemColor: const Color(0xFFE53E3E),
+        unselectedItemColor: Colors.grey,
+        backgroundColor: Colors.white,
+        elevation: 8,
+        items: const [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: 'Beranda'),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.emergency),
+            label: 'Darurat',
+          ),
+          BottomNavigationBarItem(icon: Icon(Icons.school), label: 'Edukasi'),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profil'),
+        ],
       ),
     );
   }
