@@ -4,7 +4,7 @@ import 'package:location/location.dart';
 
 class OSMMapWidget extends StatefulWidget {
   final Function(String) onLocationChanged;
-  
+
   const OSMMapWidget({super.key, required this.onLocationChanged});
 
   @override

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:frontend/screens/otp_screen.dart';
+//import 'otp_screen.dart';
+//import 'package:frontend/widgets/otp_dialog.dart';
 
 class LoginScreen extends StatelessWidget {
   LoginScreen({super.key});
@@ -37,7 +40,10 @@ class LoginScreen extends StatelessWidget {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushReplacementNamed(context, '/tracking');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => const OtpScreen()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.red,
@@ -46,16 +52,20 @@ class LoginScreen extends StatelessWidget {
                   ),
                   minimumSize: const Size(double.infinity, 48),
                 ),
-                child: const Text('Masuk'),
+                child: const Text(
+                  'Masuk',
+                  style: TextStyle(color: Colors.white),
+                ),
               ),
               const SizedBox(height: 10),
-              const Text('atau'),
+              const Text('atau', style: TextStyle(fontSize: 14)),
               const SizedBox(height: 10),
               OutlinedButton.icon(
-                icon: const Icon(Icons.g_mobiledata),
+                icon: const Icon(FontAwesomeIcons.google),
                 label: const Text('Masuk dengan google'),
                 onPressed: () {},
                 style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black,
                   minimumSize: const Size(double.infinity, 48),
                 ),
               ),
@@ -65,24 +75,26 @@ class LoginScreen extends StatelessWidget {
                 label: const Text('Masuk dengan facebook'),
                 onPressed: () {},
                 style: OutlinedButton.styleFrom(
+                  foregroundColor: Colors.black,
                   minimumSize: const Size(double.infinity, 48),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(height: 20),
               Padding(
-                padding: const EdgeInsets.only(
-                  top: 35.0,
-                ), // Jarak dari elemen atas
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     const Text(
                       "Belum punya akun? ",
-                      style: TextStyle(fontSize: 14, color: Colors.black87),
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: Color.fromARGB(221, 0, 0, 0),
+                      ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushNamed(context, '/register');
+                        // TODO: Arahkan ke Register Screen
                       },
                       child: const Text(
                         "Daftar",
