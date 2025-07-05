@@ -12,15 +12,17 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: true,
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
               const SizedBox(height: 40),
               Image.asset(
-                'images/logo-damkar.png', // Ganti dengan logo sesuai kebutuhan
+                'assets/images/logo-damkar.png',
                 height: 120,
               ),
               const SizedBox(height: 20),
@@ -111,7 +113,8 @@ class LoginScreen extends StatelessWidget {
               ),
 
               const SizedBox(height: 20),
-            ],
+              ],
+            ),
           ),
         ),
       ),

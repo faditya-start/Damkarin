@@ -17,7 +17,6 @@ class _OtpScreenState extends State<OtpScreen> {
   @override
   void initState() {
     super.initState();
-    // Munculkan dialog setelah 5 detik
     Future.delayed(const Duration(seconds: 5), () {
       if (mounted) {
         showDialog(
@@ -69,13 +68,30 @@ class _OtpScreenState extends State<OtpScreen> {
   }
 
   void _checkOtpAndNavigate() {
-    final otp = _otpControllers.map((c) => c.text).join();
-    if (otp.length == 4) {
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => const Home()),
-      );
+    try {
+      final otp = _otpControllers.map((c) => c.text).join();
+      if (otp.length == 4 && mounted) {
+        // Tambahkan delay kecil untuk memastikan UI stabil
+        Future.delayed(const Duration(milliseconds: 100), () {
+          if (mounted && context.mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const Home()),
+            );
+          }
+        });
+      }
+    } catch (e) {
+      debugPrint('Navigation error: $e');
     }
+  }
+
+  @override
+  void dispose() {
+    for (var controller in _otpControllers) {
+      controller.dispose();
+    }
+    super.dispose();
   }
 
   @override

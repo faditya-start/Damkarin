@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -15,8 +16,10 @@ class OSMMapWidget extends StatefulWidget {
 class _OSMMapWidgetState extends State<OSMMapWidget> {
   LocationData? currentLocation;
   final Location location = Location();
-  MapController? mapController;
+  MapController mapController = MapController();
   List<Marker> markers = [];
+  bool _hasMapError = false;
+  String _errorMessage = '';
 
   // Data lokasi Damkar yang akurat di Jakarta
   final List<Map<String, dynamic>> damkarLocations = [
@@ -193,99 +196,101 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
   }
 
   void initLocation() async {
-    bool serviceEnabled;
-    PermissionStatus permissionGranted;
+    try {
+      bool serviceEnabled;
+      PermissionStatus permissionGranted;
 
-    serviceEnabled = await location.serviceEnabled();
-    if (!serviceEnabled) {
-      serviceEnabled = await location.requestService();
-      if (!serviceEnabled) return;
-    }
-
-    permissionGranted = await location.hasPermission();
-    if (permissionGranted == PermissionStatus.denied) {
-      permissionGranted = await location.requestPermission();
-      if (permissionGranted != PermissionStatus.granted) return;
-    }
-
-    location.onLocationChanged.listen((newLoc) {
-      setState(() {
-        currentLocation = newLoc;
-      });
-      // Update lokasi di parent widget
-      if (newLoc.latitude != null && newLoc.longitude != null) {
-        String areaName = getAreaName(newLoc.latitude!, newLoc.longitude!);
-        widget.onLocationChanged(areaName);
+      serviceEnabled = await location.serviceEnabled();
+      if (!serviceEnabled) {
+        serviceEnabled = await location.requestService();
+        if (!serviceEnabled) return;
       }
-    });
 
-    final loc = await location.getLocation();
-    setState(() {
-      currentLocation = loc;
-    });
-    
-    // Update lokasi awal
-    if (loc.latitude != null && loc.longitude != null) {
-      String areaName = getAreaName(loc.latitude!, loc.longitude!);
-      widget.onLocationChanged(areaName);
+      permissionGranted = await location.hasPermission();
+      if (permissionGranted == PermissionStatus.denied) {
+        permissionGranted = await location.requestPermission();
+        if (permissionGranted != PermissionStatus.granted) return;
+      }
+
+      location.onLocationChanged.listen((newLoc) {
+        if (mounted) {
+          setState(() {
+            currentLocation = newLoc;
+          });
+          // Update lokasi di parent widget
+          if (newLoc.latitude != null && newLoc.longitude != null) {
+            String areaName = getAreaName(newLoc.latitude!, newLoc.longitude!);
+            widget.onLocationChanged(areaName);
+          }
+        }
+      });
+
+      final loc = await location.getLocation();
+      if (mounted) {
+        setState(() {
+          currentLocation = loc;
+        });
+        
+        // Update lokasi awal
+        if (loc.latitude != null && loc.longitude != null) {
+          String areaName = getAreaName(loc.latitude!, loc.longitude!);
+          widget.onLocationChanged(areaName);
+        }
+      }
+    } catch (e) {
+      debugPrint('Location error: $e');
     }
   }
 
   void addDamkarMarkers() {
-    for (int i = 0; i < damkarLocations.length; i++) {
-      final damkar = damkarLocations[i];
-      markers.add(
-        Marker(
-          point: LatLng(damkar['lat'], damkar['lng']),
-          width: 80,
-          height: 80,
-          child: GestureDetector(
-            onTap: () {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: Text(damkar['name']),
-                  content: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text('Area: ${damkar['area']}'),
-                      Text('Alamat: ${damkar['address']}'),
-                      const Text('Status: Siaga', style: TextStyle(color: Colors.green)),
-                    ],
-                  ),
-                  actions: [
-                    TextButton(
-                      onPressed: () => Navigator.pop(context),
-                      child: const Text('Tutup'),
-                    ),
-                  ],
-                ),
-              );
-            },
-            child: Container(
-              decoration: BoxDecoration(
-                color: Colors.red,
-                shape: BoxShape.circle,
-                border: Border.all(color: Colors.white, width: 2),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black26,
-                    blurRadius: 4,
-                    offset: const Offset(0, 2),
-                  ),
-                ],
-              ),
+    try {
+      for (int i = 0; i < damkarLocations.length; i++) {
+        final damkar = damkarLocations[i];
+        markers.add(
+          Marker(
+            point: LatLng(damkar['lat'], damkar['lng']),
+            width: 40,
+            height: 40,
+            child: GestureDetector(
+              onTap: () {
+                _showMarkerInfo(damkar);
+              },
               child: const Icon(
                 Icons.local_fire_department,
-                color: Colors.white,
-                size: 20,
+                color: Colors.red,
+                size: 30,
               ),
             ),
           ),
-        ),
-      );
+        );
+      }
+    } catch (e) {
+      debugPrint('Marker error: $e');
     }
+  }
+
+  void _showMarkerInfo(Map<String, dynamic> damkar) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text(damkar['name']),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text('Alamat: ${damkar['address']}'),
+            Text('Area: ${damkar['area']}'),
+            const Text('Status: Siaga'),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: const Text('Tutup'),
+          ),
+        ],
+      ),
+    );
   }
 
   @override
@@ -309,23 +314,96 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: FlutterMap(
-          mapController: mapController,
-          options: MapOptions(
-            initialCenter: userLoc ?? defaultCenter,
-            initialZoom: 15.0,
-            onMapEvent: (MapEvent event) {
-              // Handle map events if needed
-            },
+        child: _hasMapError
+            ? _buildErrorWidget()
+            : FlutterMap(
+                mapController: mapController,
+                options: MapOptions(
+                  initialCenter: userLoc ?? defaultCenter,
+                  initialZoom: 15.0,
+                  minZoom: 10.0,
+                  maxZoom: 18.0,
+                ),
+                children: [
+                  TileLayer(
+                    urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                    userAgentPackageName: 'com.example.frontend',
+                    maxZoom: 18,
+                  ),
+                  MarkerLayer(
+                    markers: [
+                      ...markers,
+                      if (userLoc != null)
+                        Marker(
+                          point: userLoc,
+                          width: 20,
+                          height: 20,
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
+                          ),
+                        ),
+                    ],
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  Widget _buildErrorWidget() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.grey[100],
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: Colors.grey[300]!),
+      ),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.map_outlined,
+            size: 48,
+            color: Colors.grey[600],
           ),
-          children: [
-            TileLayer(
-              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
-              userAgentPackageName: 'com.example.frontend',
+          const SizedBox(height: 8),
+          Text(
+            'Peta Tidak Tersedia',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.bold,
+              color: Colors.grey[700],
             ),
-            MarkerLayer(markers: markers),
-          ],
-        ),
+          ),
+          const SizedBox(height: 4),
+          Text(
+             'Tidak dapat memuat peta.\nPeriksa koneksi internet Anda.',
+             textAlign: TextAlign.center,
+             style: TextStyle(
+               fontSize: 12,
+               color: Colors.grey[600],
+             ),
+           ),
+          const SizedBox(height: 12),
+          ElevatedButton.icon(
+            onPressed: () {
+              setState(() {
+                _hasMapError = false;
+              });
+            },
+            icon: const Icon(Icons.refresh, size: 16),
+            label: const Text('Coba Lagi'),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.red,
+              foregroundColor: Colors.white,
+              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            ),
+          ),
+        ],
       ),
     );
   }

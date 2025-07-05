@@ -81,12 +81,13 @@ class _HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
             Row(
               children: [
                 const Icon(Icons.location_on_outlined, color: Colors.black),
@@ -164,7 +165,8 @@ class _HomeState extends State<Home> {
             const SizedBox(height: 12),
             OSMMapWidget(onLocationChanged: _onLocationChanged),
             // ... [Rekomendasi Edukasi] ...
-          ],
+            ],
+          ),
         ),
       ),
     );
