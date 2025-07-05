@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 
 class OSMMapWidget extends StatefulWidget {
@@ -14,8 +15,8 @@ class OSMMapWidget extends StatefulWidget {
 class _OSMMapWidgetState extends State<OSMMapWidget> {
   LocationData? currentLocation;
   final Location location = Location();
-  GoogleMapController? mapController;
-  Set<Marker> markers = {};
+  MapController? mapController;
+  List<Marker> markers = [];
 
   // Data lokasi Damkar yang akurat di Jakarta
   final List<Map<String, dynamic>> damkarLocations = [
@@ -186,6 +187,7 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
   @override
   void initState() {
     super.initState();
+    mapController = MapController();
     initLocation();
     addDamkarMarkers();
   }
@@ -234,13 +236,53 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
       final damkar = damkarLocations[i];
       markers.add(
         Marker(
-          markerId: MarkerId('damkar_$i'),
-          position: LatLng(damkar['lat'], damkar['lng']),
-          infoWindow: InfoWindow(
-            title: damkar['name'],
-            snippet: '${damkar['address']}\nStatus: Siaga',
+          point: LatLng(damkar['lat'], damkar['lng']),
+          width: 80,
+          height: 80,
+          child: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(damkar['name']),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Area: ${damkar['area']}'),
+                      Text('Alamat: ${damkar['address']}'),
+                      const Text('Status: Siaga', style: TextStyle(color: Colors.green)),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Tutup'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.local_fire_department,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
           ),
-          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
         ),
       );
     }
@@ -261,23 +303,29 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
           BoxShadow(
             color: Colors.black12,
             blurRadius: 4,
-            offset: Offset(0, 2),
+            offset: const Offset(0, 2),
           ),
         ],
       ),
-      child: GoogleMap(
-        onMapCreated: (GoogleMapController controller) {
-          mapController = controller;
-        },
-        initialCameraPosition: CameraPosition(
-          target: userLoc ?? defaultCenter,
-          zoom: 15.0,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(12),
+        child: FlutterMap(
+          mapController: mapController,
+          options: MapOptions(
+            initialCenter: userLoc ?? defaultCenter,
+            initialZoom: 15.0,
+            onMapEvent: (MapEvent event) {
+              // Handle map events if needed
+            },
+          ),
+          children: [
+            TileLayer(
+              urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+              userAgentPackageName: 'com.example.frontend',
+            ),
+            MarkerLayer(markers: markers),
+          ],
         ),
-        markers: markers,
-        myLocationEnabled: true,
-        myLocationButtonEnabled: true,
-        zoomControlsEnabled: false,
-        mapToolbarEnabled: false,
       ),
     );
   }

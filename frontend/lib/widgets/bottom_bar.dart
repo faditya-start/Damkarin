@@ -6,11 +6,11 @@ class CustomBottomNavBar extends StatelessWidget {
   final VoidCallback onEmergencyPressed;
 
   const CustomBottomNavBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onTap,
     required this.onEmergencyPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

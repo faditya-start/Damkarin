@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import '../models/unit.dart';
 
-Widget UnitStatusCard(UnitModel unit) {
+Widget unitStatusCard(UnitModel unit) {
   return Card(
     color: unit.status == "Siaga" ? Colors.green : Colors.orange,
     child: Padding(

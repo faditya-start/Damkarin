@@ -4,7 +4,7 @@ import 'screens/education_screen.dart';
 import 'screens/profile.dart';
 import 'screens/home_screen.dart';
 import 'screens/unit_screen.dart';
-import 'widgets/bottomBar.dart';
+import 'widgets/bottom_bar.dart';
 
 void main() => runApp(const MyApp());
 

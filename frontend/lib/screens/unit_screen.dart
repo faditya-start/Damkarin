@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:flutter_map/flutter_map.dart';
+import 'package:latlong2/latlong.dart';
 import 'package:location/location.dart';
 import 'dart:async';
 import 'dart:math';
-import '../utils/custom_marker.dart';
 
 class UnitScreen extends StatefulWidget {
   const UnitScreen({super.key});
@@ -14,13 +14,13 @@ class UnitScreen extends StatefulWidget {
 
 class _UnitScreenState extends State<UnitScreen> {
   LocationData? currentLocation;
-  GoogleMapController? mapController;
+  MapController? mapController;
   Map<String, dynamic>? nearestDamkar;
   Timer? _timer;
   double _angle = 0.0;
   final double _radius = 0.001; // ~100m
   Map<String, LatLng> unitPositions = {}; // key: unitId, value: LatLng
-  Map<String, BitmapDescriptor> unitIcons = {};
+  List<Marker> unitMarkers = [];
 
   // Data pos damkar dengan unit berbeda-beda
   final List<Map<String, dynamic>> damkarLocations = [
@@ -225,8 +225,9 @@ class _UnitScreenState extends State<UnitScreen> {
   @override
   void initState() {
     super.initState();
+    mapController = MapController();
     _initLocation();
-    _initUnitIcons();
+    _initUnitPositionsAndStartTimer();
   }
 
   @override
@@ -252,44 +253,6 @@ class _UnitScreenState extends State<UnitScreen> {
       currentLocation = loc;
       nearestDamkar = _findNearestDamkar(loc.latitude!, loc.longitude!);
     });
-  }
-
-  Future<void> _initUnitIcons() async {
-    // Create custom circular icons for each unit type
-    final fireTruckIcon = await CustomMarker.createCircularMarker(
-      backgroundColor: Colors.red,
-      imagePath: 'assets/images/Fire_Truck.jpeg',
-    );
-    final waterTankerIcon = await CustomMarker.createCircularMarker(
-      backgroundColor: Colors.blue,
-      imagePath: 'assets/images/Water_Tanker.jpeg',
-    );
-    final rescueCarIcon = await CustomMarker.createCircularMarker(
-      backgroundColor: Colors.orange,
-      imagePath: 'assets/images/rescue_car.png',
-    );
-    final ambulanceIcon = await CustomMarker.createCircularMarker(
-      backgroundColor: Colors.white,
-      imagePath: 'assets/images/ambulance.jpg',
-    );
-    final hazmatTruckIcon = await CustomMarker.createCircularMarker(
-      backgroundColor: Colors.yellow,
-      imagePath: 'assets/images/Hazmat_Truck.jpg',
-    );
-    final ladderTruckIcon = await CustomMarker.createCircularMarker(
-      backgroundColor: Colors.green,
-      imagePath: 'assets/images/Ladder_Truck.jpg',
-    );
-    
-    unitIcons = {
-      'Fire Truck': fireTruckIcon,
-      'Water Tanker': waterTankerIcon,
-      'Rescue Car': rescueCarIcon,
-      'Ambulance': ambulanceIcon,
-      'Hazmat Truck': hazmatTruckIcon,
-      'Ladder Truck': ladderTruckIcon,
-    };
-    _initUnitPositionsAndStartTimer();
   }
 
   void _initUnitPositionsAndStartTimer() {
@@ -356,18 +319,97 @@ class _UnitScreenState extends State<UnitScreen> {
     return nearest!;
   }
 
-  @override
-  Widget build(BuildContext context) {
-    final LatLng? userLoc = currentLocation != null
-        ? LatLng(currentLocation!.latitude!, currentLocation!.longitude!)
-        : null;
-    final LatLng? damkarLoc = nearestDamkar != null
-        ? LatLng(nearestDamkar!['lat'], nearestDamkar!['lng'])
-        : null;
-    final List units = nearestDamkar?['units'] ?? [];
+  List<Marker> _buildUnitMarkers() {
+    List<Marker> markers = [];
+    
+    // Add damkar location marker
+    if (nearestDamkar != null) {
+      final damkarLoc = LatLng(nearestDamkar!['lat'], nearestDamkar!['lng']);
+      markers.add(
+        Marker(
+          point: damkarLoc,
+          width: 40,
+          height: 40,
+          child: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(nearestDamkar!['name']),
+                  content: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text('Area: ${nearestDamkar!['area']}'),
+                      Text('Alamat: ${nearestDamkar!['address']}'),
+                      Text('Telepon: ${nearestDamkar!['phone']}'),
+                    ],
+                  ),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Tutup'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.red,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 2),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 4,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: const Icon(
+                Icons.local_fire_department,
+                color: Colors.white,
+                size: 20,
+              ),
+            ),
+          ),
+        ),
+      );
+    }
 
-    // Build all unit markers
-    Set<Marker> unitMarkers = {};
+    // Add user location marker
+    if (currentLocation != null) {
+      final userLoc = LatLng(currentLocation!.latitude!, currentLocation!.longitude!);
+      markers.add(
+        Marker(
+          point: userLoc,
+          width: 40,
+          height: 40,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.blue,
+              shape: BoxShape.circle,
+              border: Border.all(color: Colors.white, width: 2),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black26,
+                  blurRadius: 4,
+                  offset: const Offset(0, 2),
+                ),
+              ],
+            ),
+            child: const Icon(
+              Icons.location_on,
+              color: Colors.white,
+              size: 20,
+            ),
+          ),
+        ),
+      );
+    }
+
+    // Add unit markers
     unitPositions.forEach((unitId, pos) {
       // Extract unit type from unitId
       String type = unitId.contains('Fire Truck')
@@ -383,15 +425,83 @@ class _UnitScreenState extends State<UnitScreen> {
                           : unitId.contains('Ladder Truck')
                               ? 'Ladder Truck'
                               : 'Fire Truck'; // default fallback
-      unitMarkers.add(
+
+      Color markerColor = type == 'Fire Truck'
+          ? Colors.red
+          : type == 'Water Tanker'
+              ? Colors.blue
+              : type == 'Rescue Car'
+                  ? Colors.orange
+                  : type == 'Ambulance'
+                      ? Colors.white
+                      : type == 'Hazmat Truck'
+                          ? Colors.yellow
+                          : Colors.green;
+
+      markers.add(
         Marker(
-          markerId: MarkerId(unitId),
-          position: pos,
-          icon: unitIcons[type] ?? BitmapDescriptor.defaultMarker,
-          infoWindow: InfoWindow(title: unitId.split('_')[1]),
+          point: pos,
+          width: 30,
+          height: 30,
+          child: GestureDetector(
+            onTap: () {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: Text(type),
+                  content: Text('Unit ID: $unitId'),
+                  actions: [
+                    TextButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: const Text('Tutup'),
+                    ),
+                  ],
+                ),
+              );
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: markerColor,
+                shape: BoxShape.circle,
+                border: Border.all(color: Colors.white, width: 1),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black26,
+                    blurRadius: 2,
+                    offset: const Offset(0, 1),
+                  ),
+                ],
+              ),
+              child: Icon(
+                type == 'Fire Truck'
+                    ? Icons.local_fire_department
+                    : type == 'Water Tanker'
+                        ? Icons.water_drop
+                        : type == 'Rescue Car'
+                            ? Icons.car_rental
+                            : type == 'Ambulance'
+                                ? Icons.medical_services
+                                : type == 'Hazmat Truck'
+                                    ? Icons.warning
+                                    : Icons.vertical_align_top,
+                color: Colors.white,
+                size: 16,
+              ),
+            ),
+          ),
         ),
       );
     });
+
+    return markers;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final LatLng? damkarLoc = nearestDamkar != null
+        ? LatLng(nearestDamkar!['lat'], nearestDamkar!['lng'])
+        : null;
+    final List units = nearestDamkar?['units'] ?? [];
 
     return SingleChildScrollView(
       child: Padding(
@@ -409,38 +519,22 @@ class _UnitScreenState extends State<UnitScreen> {
               ),
               child: damkarLoc == null
                   ? const Center(child: CircularProgressIndicator())
-                  : GoogleMap(
-                      onMapCreated: (controller) => mapController = controller,
-                      initialCameraPosition: CameraPosition(
-                        target: damkarLoc,
-                        zoom: 13,
-                      ),
-                      markers: {
-                        // Marker pos damkar terdekat
-                        Marker(
-                          markerId: const MarkerId('damkar_terdekat'),
-                          position: damkarLoc,
-                          infoWindow: InfoWindow(
-                            title: nearestDamkar!['name'],
-                            snippet: nearestDamkar!['address'],
-                          ),
-                          icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueRed),
+                  : ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: FlutterMap(
+                        mapController: mapController,
+                        options: MapOptions(
+                          initialCenter: damkarLoc,
+                          initialZoom: 13.0,
                         ),
-                        // Marker user
-                        if (userLoc != null)
-                          Marker(
-                            markerId: const MarkerId('user'),
-                            position: userLoc,
-                            infoWindow: const InfoWindow(title: 'Lokasi Anda'),
-                            icon: BitmapDescriptor.defaultMarkerWithHue(BitmapDescriptor.hueBlue),
+                        children: [
+                          TileLayer(
+                            urlTemplate: 'https://tile.openstreetmap.org/{z}/{x}/{y}.png',
+                            userAgentPackageName: 'com.example.frontend',
                           ),
-                        // Semua marker unit
-                        ...unitMarkers,
-                      },
-                      myLocationEnabled: true,
-                      myLocationButtonEnabled: true,
-                      zoomControlsEnabled: false,
-                      mapToolbarEnabled: false,
+                          MarkerLayer(markers: _buildUnitMarkers()),
+                        ],
+                      ),
                     ),
             ),
             const SizedBox(height: 16),
