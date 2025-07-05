@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -19,7 +18,6 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
   MapController mapController = MapController();
   List<Marker> markers = [];
   bool _hasMapError = false;
-  String _errorMessage = '';
 
   // Data lokasi Damkar yang akurat di Jakarta
   final List<Map<String, dynamic>> damkarLocations = [

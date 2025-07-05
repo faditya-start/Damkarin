@@ -11,7 +11,7 @@ class Education extends StatefulWidget {
 }
 
 class _EducationState extends State<Education> {
-  int _selectedIndex = 2;
+  final int _selectedIndex = 2;
 
   void _onItemTapped(int index) {
     if (index == _selectedIndex) return;
@@ -95,11 +95,11 @@ class _EducationState extends State<Education> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    buildArticleCard('images/1.jpeg'),
+                    buildArticleCard('assets/images/1.jpeg'),
                     const SizedBox(width: 8),
-                    buildArticleCard('images/2.jpeg'),
+                    buildArticleCard('assets/images/2.jpeg'),
                     const SizedBox(width: 8),
-                    buildArticleCard('images/3.jpeg'),
+                    buildArticleCard('assets/images/3.jpeg'),
                   ],
                 ),
               ),
@@ -235,8 +235,9 @@ class _EducationState extends State<Education> {
           await launchUrl(url, mode: LaunchMode.externalApplication);
         } else {
           ScaffoldMessenger.of(
+            // ignore: use_build_context_synchronously
             context,
-          ).showSnackBar(SnackBar(content: Text('Tidak bisa membuka link')));
+          ).showSnackBar(const SnackBar(content: Text('Tidak bisa membuka link')));
         }
       },
       child: Container(

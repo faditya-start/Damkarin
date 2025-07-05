@@ -157,6 +157,7 @@ class _HomeState extends State<Home> {
                   borderRadius: BorderRadius.circular(12),
                   boxShadow: [
                     BoxShadow(
+                      // ignore: deprecated_member_use
                       color: Colors.black.withOpacity(0.1),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
@@ -201,6 +202,7 @@ class _HomeState extends State<Home> {
                                 vertical: 2,
                               ),
                               decoration: BoxDecoration(
+                                // ignore: deprecated_member_use
                                 color: const Color(0xFFE53E3E).withOpacity(0.1),
                                 borderRadius: BorderRadius.circular(8),
                               ),

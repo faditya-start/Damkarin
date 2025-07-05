@@ -39,6 +39,10 @@ flutter:
     - assets/images/ambulance.jpg
     - assets/images/Hazmat_Truck.jpg
     - assets/images/Ladder_Truck.jpg
+    - assets/images/1.jpeg
+    - assets/images/2.jpeg
+    - assets/images/3.jpeg
+    - assets/images/tutorial.jpeg
 
 flutter_icons:
   android: true

@@ -12,7 +12,7 @@ class EmergencyCallScreen extends StatefulWidget {
 }
 
 class _EmergencyCallScreenState extends State<EmergencyCallScreen> {
-  int _selectedIndex = 1; 
+  final int _selectedIndex = 1; 
 
   void _onItemTapped(int index) {
     switch (index) {
@@ -161,6 +161,7 @@ class _EmergencyCallScreenState extends State<EmergencyCallScreen> {
                         borderRadius: BorderRadius.circular(12),
                         boxShadow: [
                           BoxShadow(
+                            // ignore: deprecated_member_use
                             color: Colors.black.withOpacity(0.1),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
