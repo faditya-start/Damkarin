@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class EditProfile extends StatefulWidget {
+  const EditProfile({super.key});
+  
   @override
-  _EditAkunPageState createState() => _EditAkunPageState();
+  State<EditProfile> createState() => _EditAkunPageState();
 }
 
 class _EditAkunPageState extends State<EditProfile> {
@@ -162,14 +164,14 @@ class _EditAkunPageState extends State<EditProfile> {
                     width: double.infinity,
                     child: ElevatedButton(
                       onPressed: () {
-                        final nama = namaController.text;
-                        final hp = hpController.text;
-                        final email = emailController.text;
+                        // final nama = namaController.text;
+                        // final hp = hpController.text;
+                        // final email = emailController.text;
 
-                        print('Nama: $nama');
-                        print('Nomor HP: $hp');
-                        print('Email: $email');
-                        print('Notifikasi: ${notifikasi ? "Aktif" : "Nonaktif"}');
+                        // print('Nama: $nama');
+                        // print('Nomor HP: $hp');
+                        // print('Email: $email');
+                        // print('Notifikasi: ${notifikasi ? "Aktif" : "Nonaktif"}');
 
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
