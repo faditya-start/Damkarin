@@ -34,14 +34,20 @@ class _UnitScreenState extends State<UnitScreen> {
       'units': [
         {
           'name': 'Fire Truck',
-          'image': 'assets/images/fire_truck.png',
+          'image': 'assets/images/Fire_Truck.jpeg',
           'status': 'Siaga',
           'jumlah': 2,
         },
         {
           'name': 'Water Tanker',
-          'image': 'assets/images/water_tanker.png',
+          'image': 'assets/images/Water_Tanker.jpeg',
           'status': 'Dalam perbaikan',
+          'jumlah': 1,
+        },
+        {
+          'name': 'Ambulance',
+          'image': 'assets/images/ambulance.jpg',
+          'status': 'Siaga',
           'jumlah': 1,
         },
       ],
@@ -56,7 +62,7 @@ class _UnitScreenState extends State<UnitScreen> {
       'units': [
         {
           'name': 'Fire Truck',
-          'image': 'assets/images/fire_truck.png',
+          'image': 'assets/images/Fire_Truck.jpeg',
           'status': 'Siaga',
           'jumlah': 1,
         },
@@ -64,6 +70,12 @@ class _UnitScreenState extends State<UnitScreen> {
           'name': 'Rescue Car',
           'image': 'assets/images/rescue_car.png',
           'status': 'Melakukan tugas',
+          'jumlah': 1,
+        },
+        {
+          'name': 'Hazmat Truck',
+          'image': 'assets/images/Hazmat_Truck.jpg',
+          'status': 'Siaga',
           'jumlah': 1,
         },
       ],
@@ -78,15 +90,21 @@ class _UnitScreenState extends State<UnitScreen> {
       'units': [
         {
           'name': 'Fire Truck',
-          'image': 'assets/images/fire_truck.png',
+          'image': 'assets/images/Fire_Truck.jpeg',
           'status': 'Dalam perbaikan',
           'jumlah': 1,
         },
         {
           'name': 'Water Tanker',
-          'image': 'assets/images/water_tanker.png',
+          'image': 'assets/images/Water_Tanker.jpeg',
           'status': 'Siaga',
           'jumlah': 2,
+        },
+        {
+          'name': 'Ladder Truck',
+          'image': 'assets/images/Ladder_Truck.jpg',
+          'status': 'Siaga',
+          'jumlah': 1,
         },
       ],
     },
@@ -104,6 +122,12 @@ class _UnitScreenState extends State<UnitScreen> {
           'status': 'Siaga',
           'jumlah': 2,
         },
+        {
+          'name': 'Ambulance',
+          'image': 'assets/images/ambulance.jpg',
+          'status': 'Melakukan tugas',
+          'jumlah': 1,
+        },
       ],
     },
     {
@@ -116,13 +140,13 @@ class _UnitScreenState extends State<UnitScreen> {
       'units': [
         {
           'name': 'Fire Truck',
-          'image': 'assets/images/fire_truck.png',
+          'image': 'assets/images/Fire_Truck.jpeg',
           'status': 'Siaga',
           'jumlah': 1,
         },
         {
           'name': 'Water Tanker',
-          'image': 'assets/images/water_tanker.png',
+          'image': 'assets/images/Water_Tanker.jpeg',
           'status': 'Siaga',
           'jumlah': 1,
         },
@@ -134,7 +158,68 @@ class _UnitScreenState extends State<UnitScreen> {
         },
       ],
     },
-    // Tambah pos lain jika perlu
+    {
+      'name': 'Pos Damkar Kelapa Gading',
+      'lat': -6.1789,
+      'lng': 106.9320,
+      'area': 'Jakarta Utara',
+      'address': 'Kelurahan Kelapa Gading Barat, Jakarta Utara',
+      'phone': '021-6543216',
+      'units': [
+        {
+          'name': 'Hazmat Truck',
+          'image': 'assets/images/Hazmat_Truck.jpg',
+          'status': 'Siaga',
+          'jumlah': 1,
+        },
+        {
+          'name': 'Ladder Truck',
+          'image': 'assets/images/Ladder_Truck.jpg',
+          'status': 'Dalam perbaikan',
+          'jumlah': 1,
+        },
+        {
+          'name': 'Ambulance',
+          'image': 'assets/images/ambulance.jpg',
+          'status': 'Siaga',
+          'jumlah': 2,
+        },
+      ],
+    },
+    {
+      'name': 'Pos Damkar Pluit',
+      'lat': -6.1890,
+      'lng': 106.9431,
+      'area': 'Jakarta Utara',
+      'address': 'Kelurahan Pluit, Jakarta Utara',
+      'phone': '021-6543217',
+      'units': [
+        {
+          'name': 'Fire Truck',
+          'image': 'assets/images/Fire_Truck.jpeg',
+          'status': 'Siaga',
+          'jumlah': 1,
+        },
+        {
+          'name': 'Water Tanker',
+          'image': 'assets/images/Water_Tanker.jpeg',
+          'status': 'Siaga',
+          'jumlah': 1,
+        },
+        {
+          'name': 'Rescue Car',
+          'image': 'assets/images/rescue_car.png',
+          'status': 'Siaga',
+          'jumlah': 1,
+        },
+        {
+          'name': 'Ladder Truck',
+          'image': 'assets/images/Ladder_Truck.jpg',
+          'status': 'Siaga',
+          'jumlah': 1,
+        },
+      ],
+    },
   ];
 
   @override
@@ -173,21 +258,36 @@ class _UnitScreenState extends State<UnitScreen> {
     // Create custom circular icons for each unit type
     final fireTruckIcon = await CustomMarker.createCircularMarker(
       backgroundColor: Colors.red,
-      imagePath: 'assets/images/fire_truck.png',
+      imagePath: 'assets/images/Fire_Truck.jpeg',
     );
     final waterTankerIcon = await CustomMarker.createCircularMarker(
       backgroundColor: Colors.blue,
-      imagePath: 'assets/images/water_tanker.png',
+      imagePath: 'assets/images/Water_Tanker.jpeg',
     );
     final rescueCarIcon = await CustomMarker.createCircularMarker(
       backgroundColor: Colors.orange,
       imagePath: 'assets/images/rescue_car.png',
+    );
+    final ambulanceIcon = await CustomMarker.createCircularMarker(
+      backgroundColor: Colors.white,
+      imagePath: 'assets/images/ambulance.jpg',
+    );
+    final hazmatTruckIcon = await CustomMarker.createCircularMarker(
+      backgroundColor: Colors.yellow,
+      imagePath: 'assets/images/Hazmat_Truck.jpg',
+    );
+    final ladderTruckIcon = await CustomMarker.createCircularMarker(
+      backgroundColor: Colors.green,
+      imagePath: 'assets/images/Ladder_Truck.jpg',
     );
     
     unitIcons = {
       'Fire Truck': fireTruckIcon,
       'Water Tanker': waterTankerIcon,
       'Rescue Car': rescueCarIcon,
+      'Ambulance': ambulanceIcon,
+      'Hazmat Truck': hazmatTruckIcon,
+      'Ladder Truck': ladderTruckIcon,
     };
     _initUnitPositionsAndStartTimer();
   }
@@ -274,7 +374,15 @@ class _UnitScreenState extends State<UnitScreen> {
           ? 'Fire Truck'
           : unitId.contains('Water Tanker')
               ? 'Water Tanker'
-              : 'Rescue Car';
+              : unitId.contains('Rescue Car')
+                  ? 'Rescue Car'
+                  : unitId.contains('Ambulance')
+                      ? 'Ambulance'
+                      : unitId.contains('Hazmat Truck')
+                          ? 'Hazmat Truck'
+                          : unitId.contains('Ladder Truck')
+                              ? 'Ladder Truck'
+                              : 'Fire Truck'; // default fallback
       unitMarkers.add(
         Marker(
           markerId: MarkerId(unitId),

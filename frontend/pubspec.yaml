@@ -33,9 +33,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/images/logo-damkar.png
-    - assets/images/fire_truck.png
-    - assets/images/water_tanker.png
+    - assets/images/Fire_Truck.jpeg
+    - assets/images/water_tanker.jpeg
     - assets/images/rescue_car.png
+    - assets/images/ambulance.jpg
+    - assets/images/Hazmat_Truck.jpg
+    - assets/images/Ladder_Truck.jpg
 
 flutter_icons:
   android: true
