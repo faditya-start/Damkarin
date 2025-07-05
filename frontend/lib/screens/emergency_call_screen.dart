@@ -75,7 +75,7 @@ class _EmergencyCallScreenState extends State<EmergencyCallScreen> {
 
     try {
       if (await canLaunchUrl(launchUri)) {
-        await launchUrl(launchUri);
+        await launchUrl(launchUri, mode: LaunchMode.externalApplication);
       } else {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
