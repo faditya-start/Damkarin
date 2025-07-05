@@ -34,14 +34,13 @@ class CustomBottomNavBar extends StatelessWidget {
               children: [
                 _navItem(Icons.home, "Beranda", 0),
                 _navItem(Icons.fire_truck, "Unit", 1),
-                const SizedBox(width: 60), // jarak tombol tengah
+                const SizedBox(width: 60), 
                 _navItem(Icons.menu_book, "Edukasi", 2),
                 _navItem(Icons.person, "Akun", 3),
               ],
             ),
           ),
 
-          // Tombol Darurat Tengah
           Positioned(
             top: -30,
             child: FloatingActionButton(

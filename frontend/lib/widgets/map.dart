@@ -170,9 +170,7 @@ class _OSMMapWidgetState extends State<OSMMapWidget> {
     },
   ];
 
-  // Fungsi untuk mendapatkan nama wilayah berdasarkan koordinat
   String getAreaName(double lat, double lng) {
-    // Logika sederhana untuk menentukan wilayah Jakarta
     if (lat >= -6.3 && lat <= -6.1 && lng >= 106.7 && lng <= 106.9) {
       if (lat >= -6.25) return 'Jakarta Selatan';
       if (lat >= -6.2) return 'Jakarta Pusat';

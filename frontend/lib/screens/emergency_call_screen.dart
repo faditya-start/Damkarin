@@ -12,29 +12,25 @@ class EmergencyCallScreen extends StatefulWidget {
 }
 
 class _EmergencyCallScreenState extends State<EmergencyCallScreen> {
-  int _selectedIndex = 1; // Emergency tab is selected
+  int _selectedIndex = 1; 
 
   void _onItemTapped(int index) {
     switch (index) {
       case 0:
-        // Navigate to Home
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Home()),
         );
         break;
       case 1:
-        // Already on Emergency
         break;
       case 2:
-        // Navigate to Education
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Education()),
         );
         break;
       case 3:
-        // Navigate to Profile
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => const Profile()),

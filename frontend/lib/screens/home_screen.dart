@@ -39,6 +39,34 @@ class _HomeState extends State<Home> {
   List<String> _filteredStations = [];
   String _currentArea = 'Jakarta';
 
+  final List<Map<String, dynamic>> _newsData = [
+    {
+      'title':
+          'Damkar Jakarta Berhasil Padamkan Kebakaran di Gedung Perkantoran',
+      'summary':
+          'Tim pemadam kebakaran berhasil memadamkan api dalam waktu 2 jam tanpa korban jiwa.',
+      'date': '15 Januari 2024',
+      'image': 'assets/images/Fire_Truck.jpeg',
+      'category': 'Berita Utama',
+    },
+    {
+      'title': 'Pelatihan Pencegahan Kebakaran untuk Warga Jakarta Selatan',
+      'summary':
+          'Program edukasi pencegahan kebakaran dilaksanakan di 10 kelurahan.',
+      'date': '12 Januari 2024',
+      'image': 'assets/images/rescue_car.png',
+      'category': 'Edukasi',
+    },
+    {
+      'title': 'Damkar Tambah 5 Unit Mobil Pemadam Baru',
+      'summary':
+          'Penambahan armada untuk meningkatkan pelayanan darurat di wilayah Jakarta.',
+      'date': '10 Januari 2024',
+      'image': 'assets/images/water_tanker.jpeg',
+      'category': 'Pengadaan',
+    },
+  ];
+
   void _getCurrentLocation() async {
     // final Location location = Location();
     try {
@@ -87,33 +115,176 @@ class _HomeState extends State<Home> {
       _selectedIndex = index;
     });
 
-    // Handle navigation based on selected index
     switch (index) {
       case 0:
-        // Already on Home
         break;
       case 1:
-        // Navigate to Emergency/Call page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const EmergencyCallScreen()),
         );
         break;
       case 2:
-        // Navigate to Education page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const Education()),
         );
         break;
       case 3:
-        // Navigate to Profile page
         Navigator.push(
           context,
           MaterialPageRoute(builder: (context) => const Profile()),
         );
         break;
     }
+  }
+
+  Widget _buildNewsSection() {
+    return Column(
+      children: [
+        SizedBox(
+          height: 220,
+          child: ListView.builder(
+            scrollDirection: Axis.horizontal,
+            itemCount: _newsData.length,
+            itemBuilder: (context, index) {
+              final news = _newsData[index];
+              return Container(
+                width: 280,
+                margin: const EdgeInsets.only(right: 16),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(12),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      blurRadius: 8,
+                      offset: const Offset(0, 2),
+                    ),
+                  ],
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    ClipRRect(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(12),
+                        topRight: Radius.circular(12),
+                      ),
+                      child: Image.asset(
+                        news['image'],
+                        height: 100,
+                        width: double.infinity,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Container(
+                            height: 100,
+                            color: Colors.grey[300],
+                            child: const Icon(
+                              Icons.image_not_supported,
+                              color: Colors.grey,
+                            ),
+                          );
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: Padding(
+                        padding: const EdgeInsets.all(10),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 2,
+                              ),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFE53E3E).withOpacity(0.1),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              child: Text(
+                                news['category'],
+                                style: const TextStyle(
+                                  color: Color(0xFFE53E3E),
+                                  fontSize: 9,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(height: 6),
+                            // Title
+                            Text(
+                              news['title'],
+                              style: const TextStyle(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 13,
+                                color: Color(0xFF3F3D56),
+                              ),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                            ),
+                            const SizedBox(height: 3),
+                            Expanded(
+                              child: Text(
+                                news['summary'],
+                                style: TextStyle(
+                                  color: Colors.grey[600],
+                                  fontSize: 11,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ),
+                            // Date
+                            Text(
+                              news['date'],
+                              style: TextStyle(
+                                color: Colors.grey[500],
+                                fontSize: 10,
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            },
+          ),
+        ),
+        const SizedBox(height: 16),
+        SizedBox(
+          width: double.infinity,
+          child: OutlinedButton(
+            onPressed: () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(
+                  content: Text('Fitur berita lengkap akan segera hadir!'),
+                  backgroundColor: Color(0xFFE53E3E),
+                ),
+              );
+            },
+            style: OutlinedButton.styleFrom(
+              side: const BorderSide(color: Color(0xFFE53E3E)),
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              padding: const EdgeInsets.symmetric(vertical: 12),
+            ),
+            child: const Text(
+              'Lihat Semua Berita',
+              style: TextStyle(
+                color: Color(0xFFE53E3E),
+                fontWeight: FontWeight.w600,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -207,7 +378,17 @@ class _HomeState extends State<Home> {
                     ),
               const SizedBox(height: 12),
               OSMMapWidget(onLocationChanged: _onLocationChanged),
-              // ... [Rekomendasi Edukasi] ...
+              const SizedBox(height: 24),
+              const Text(
+                'Berita Terkini Pemadam Kebakaran',
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF3F3D56),
+                ),
+              ),
+              const SizedBox(height: 16),
+              _buildNewsSection(),
             ],
           ),
         ),
